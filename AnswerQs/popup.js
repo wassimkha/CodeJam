@@ -1,6 +1,11 @@
+// timer variables
+var timer;
+var typetimer;
+const time = 1700;
+
 function giveAnswer(question) {
     document.getElementById("output").innerHTML = "Finding answers for question: " + question;
-    console.log("finding answers for question", question)
+    console.log("Finding answers for question: ", question)
     //if the question does not end with \n, add it
     var match = /\r|\n/.exec(question);
     if (!match) {
@@ -41,13 +46,26 @@ function giveAnswer(question) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer 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");
+    xhr.setRequestHeader("Authorization", "Bearer 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");
 
     xhr.send(data);
     return "hello there";
 }
+
+document.getElementById('searchBox').onkeyup = function()
+{
+  clearTimeout(timer);
+  var query = document.getElementById("searchBox").value;
+  timer = setTimeout(function(){giveAnswer(query);}, time)
+}
+
+document.getElementById('searchBox').onkeydown = function()
+{
+  clearTimeout(timer);
+}
+
 chrome.tabs.executeScript( {
-    code: "window.getSelection().toString();"
+    code: "window.getSelection().toString();",
 }, function(selection) {
     giveAnswer(selection);
 });
