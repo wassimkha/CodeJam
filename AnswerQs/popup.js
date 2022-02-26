@@ -1,13 +1,22 @@
 function giveAnswer(question) {
+    document.getElementById("output").innerHTML = "Finding answers for question: " + question;
+    console.log("finding answers for question", question)
+    //if the question does not end with \n, add it
+    var match = /\r|\n/.exec(question);
+    if (!match) {
+        question += "\n";
+        question += "\n";
+        console.log("adding space breaks");
+    }
     var data = JSON.stringify({
-        "prompt": "I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\".\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\n\nQ: Who was president of the United States in 1955?\nA: Dwight D. Eisenhower was president of the United States in 1955.\n\nQ: Which party did he belong to?\nA: He belonged to the Republican Party.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: " + question,
+        "prompt": "Q: " + question + '\\nA:"',
         "temperature": 0,
-        "max_tokens": 994,
-        "top_p": 1,
+        "max_tokens": 1500,
+        "top_p": 0.5,
         "frequency_penalty": 0,
         "presence_penalty": 0,
         "stop": [
-            "n"
+            "\n"
         ]
     });
 
@@ -32,7 +41,7 @@ function giveAnswer(question) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer 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");
+    xhr.setRequestHeader("Authorization", "Bearer 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");
 
     xhr.send(data);
     return "hello there";
@@ -40,6 +49,5 @@ function giveAnswer(question) {
 chrome.tabs.executeScript( {
     code: "window.getSelection().toString();"
 }, function(selection) {
-    document.getElementById("output").innerHTML = "loading..."
     giveAnswer(selection);
 });
