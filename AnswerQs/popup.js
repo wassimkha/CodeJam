@@ -36,7 +36,7 @@ function giveAnswer(question) {
             if (obj && obj.choices && obj.choices.length > 0) {
                 var completion = obj.choices[0].text;
                 if (completion.length > 0) {
-                    document.getElementById("output").innerHTML = completion;
+                    addAnnotations(completion);
                 } else {
                     document.getElementById("output").innerHTML = "No answer found";
                 }
@@ -46,10 +46,30 @@ function giveAnswer(question) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer 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");
+    xhr.setRequestHeader("Authorization", "Bearer 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");
 
     xhr.send(data);
     return "hello there";
+}
+
+function addAnnotations(answerText)
+{
+var urlpath = "https://api.dbpedia-spotlight.org/en/annotate?text=";
+var queryParams = encodeURI(answerText);
+var url = urlpath + queryParams
+
+var xhr2 = new XMLHttpRequest();
+xhr2.open("GET", url);
+xhr2.addEventListener("readystatechange", function() 
+{
+   if (xhr2.readyState === 4)
+   {
+      var htmlResult = String(xhr2.responseText)
+      var parsedText = new DOMParser().parseFromString(htmlResult, "text/html").getElementsByTagName("DIV")[0].innerHTML;
+      document.getElementById("output").innerHTML = parsedText;
+   }
+});
+xhr2.send();
 }
 
 document.getElementById('searchBox').onkeyup = function()
