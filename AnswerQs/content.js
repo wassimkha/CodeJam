@@ -64,16 +64,48 @@ function giveAnswer(question, pTag) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer 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");
+    xhr.setRequestHeader("Authorization", "Bearer ");
 
     xhr.send(data);
     return "hello there";
 }
 
+function getDefinition(word, pTag) {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            var res = this.responseText;
+            var obj = JSON.parse(res);
+            console.log(obj, obj.length)
+            if (obj && obj.length > 0) {
+                obj = obj[0];
+                var html = "";
+
+                for (var i = 0; i < obj.meanings.length; i++) {
+                    html += obj.meanings[i].partOfSpeech + "<br> <ul>";
+                    for (var j = 0; j < Math.min(obj.meanings[i].definitions.length, 3); j++) {
+                        html += "<li>" + obj.meanings[i].definitions[j].definition + "</li>";
+                    }
+                    html += "</ul>";
+                }
+                pTag.innerHTML = html;
+            } else {
+                pTag.innerHTML = "No definition found";
+            }
+        }
+    });
+
+    xhr.open("GET", "https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+
+    xhr.send();
+}
+
 function fireContentLoadedEvent (items) {
     var div = document.createElement('div');
     var h1 = document.createElement('h1');
-    h1.innerHTML = "Your Answer";
+    h1.innerHTML = "";
     h1.style.margin = "0px";
     h1.style.fontSize = "13px";
     div.appendChild(h1);
@@ -103,20 +135,33 @@ function fireContentLoadedEvent (items) {
     document.addEventListener('mouseup', function callback(e) {
         // set the position of the hover element
         selectedText = window.getSelection().toString();
+        var selectedTextWithoutSpaces = selectedText.trim();
+        var spaceCount = (selectedTextWithoutSpaces.split(" ").length - 1);
         //show if selected text is longer than 3 charaters
-        if (selectedText.length > 3) {
+        if (selectedText.length > 3 && selectedText.endsWith("?")) {
+            console.log("we got a question");
+            h1.innerHTML = "Your Answer";
             div.style.top = e.pageY + 'px';
             div.style.left = e.pageX + 'px';
+            p.style.fontSize = "25px";
+            div.style.backgroundColor = '#59b371';
             div.style.display = 'block';
-            //set the innerHTML of the p tag to the selected text
-            if (loading) {
-                p.innerHTML = "loading";
-            }
-
-            loading = true;
             p.innerHTML = "loading...";
             giveAnswer(selectedText, p);
+        } else if (selectedTextWithoutSpaces.length >= 1 && spaceCount == 0) {
+            console.log("got a single word");
+            h1.innerHTML = "Your definition";
+            div.style.top = e.pageY + 'px';
+            div.style.left = e.pageX + 'px';
+            p.style.fontSize = "15px";
+            div.style.backgroundColor = '#82b5bd';
+            div.style.display = 'block';
+            //#82b5bd
+            p.innerHTML = "loading...";
+            getDefinition(selectedTextWithoutSpaces, p);
+
         } else {
+            console.log("not a question")
             loading = false;
             div.style.display = 'none';
             p.innerHTML = "";
