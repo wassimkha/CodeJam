@@ -1,5 +1,4 @@
 // timer variables
-// timer variables
 const time = 1700;
 var timer;
 var typetimer;

@@ -60,7 +60,7 @@
         #searchBox{
             width: 100%;
             padding: 12px 20px;
-            margin: 8px 0;
+            margin: 18px 0px 8px;
             border-radius: 12px;
             box-sizing: border-box;
             background-color: #E8E8E8;
@@ -101,6 +101,17 @@
             top: 50%;
             transform: translate(-50%, -50%);
         }
+
+        .modalCommande-help
+        {
+            width: 65%;
+        }
+
+        .help-text{
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+
         .row{
             display: inline-flex;
         }
@@ -143,9 +154,34 @@
 
     <button class="button help" id ="showHelp">?</button>
     <div id="helpModal" class="modalCommande">
-        <div class="modalCommande-content">
-            <h3>Help</h3>
-            
+        <div class="modalCommande-content modalCommande-help">
+            <h2 class="help-text">Setup:</h2>
+            <p class="help-text">
+            1) Create a free account on Open AI
+            <br>
+            2) Copy your API key from Open AI's dashboard
+            <br>
+            3) Paste your key in the extension's settings
+            <br>
+            4) Enjoy!
+            </p>
+
+            <h2 class="help-text">How to Use:</h2>
+            <p class="help-text">
+            -Select a word from any page to get its definition
+            <br>
+            -Select a question from any page to get its answer (question must end with "?")
+            <br>
+            -Click directly on the extension icon for a more detailed response.
+            </p>
+            <h2 class="help-text">About:</h2>
+            <p class="help-text">
+            This extension was created for the McGill 2022 CodeJam.
+            Powered by Open AI API, DBPedia, DictionaryAPI.dev
+            <br>
+            Created By:
+            Louis Madre, Wassim Khadim, Sara Beddouch, Jack Denton
+            </p>
         </div>
     </div>
 </div>
