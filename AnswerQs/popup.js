@@ -45,6 +45,8 @@ function giveAnswer(question) {
             if (obj && obj.choices && obj.choices.length > 0) {
                 var completion = obj.choices[0].text;
                 if (completion.length > 0) {
+                    //if there is a quotation mark at the end, remove it
+                    completion = completion.replace(/\"/g, "");
                     addAnnotations(completion, question);
                 } else {
                     document.getElementById("output").innerHTML = "No answer found";
@@ -139,7 +141,14 @@ document.getElementById('searchBox').onkeydown = function()
 chrome.tabs.executeScript( {
     code: "window.getSelection().toString();",
 }, function(selection) {
-    giveAnswer(selection);
+    if (!apiKey) {
+        chrome.storage.local.get(['apiKey'], function(result) {
+            apiKey = result.apiKey;
+            giveAnswer(selection);
+        });
+    } else {
+        giveAnswer(selection);
+    }
 });
 
 function setHistory(index){
@@ -151,8 +160,8 @@ function setHistory(index){
     for(let i = len - 1; i >= 0; i--){
         console.log(questionsAndAnswers[len - i]);
         history += "<br/>";
-        history += "<br/>" + questionsAndAnswers[i][0];
-        history += "<br/>" + questionsAndAnswers[i][1];
+        history += "<br/>Q: " + questionsAndAnswers[i][0];
+        history += "<br/>A: " + questionsAndAnswers[i][1];
     }
     return history;
 }

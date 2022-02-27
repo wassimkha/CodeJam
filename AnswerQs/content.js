@@ -143,7 +143,7 @@ function fireContentLoadedEvent (items) {
         var selectedTextWithoutSpaces = selectedText.trim();
         var spaceCount = (selectedTextWithoutSpaces.split(" ").length - 1);
         //show if selected text is longer than 3 charaters
-        if (selectedText.length > 3 && selectedText.endsWith("?")) {
+        if (selectedText.length > 3 && selectedTextWithoutSpaces.endsWith("?")) {
             console.log("we got a question");
             h1.innerHTML = "Your Answer";
             div.style.top = e.pageY + 'px';
