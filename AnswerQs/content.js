@@ -1,5 +1,6 @@
 console.log("from the extension");
 var apiKey;
+
 function getSelectionText() {
     var text = "";
     var activeEl = document.activeElement;
@@ -55,6 +56,18 @@ function giveAnswer(question, pTag) {
                 loading = false;
                 if (completion.length > 0) {
                     pTag.innerHTML = completion;
+
+                    chrome.storage.local.get(['questionsAndAnswers'], function(result) {
+                        questionsAndAnswers = result.questionsAndAnswers;
+
+                        if(questionsAndAnswers){
+                            questionsAndAnswers.push([question, completion]);
+
+                            chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
+                                console.log('Value is set to ' + questionsAndAnswers);
+                            });
+                        }
+                    });
                 } else {
                     pTag.innerHTML = "No answer found";
                 }
