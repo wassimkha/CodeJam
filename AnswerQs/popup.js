@@ -113,6 +113,14 @@ chrome.storage.local.get(['apiKey'], function(result) {
     console.log('Value currently is ' + apiKey);
 });
 
+chrome.storage.local.get(['questionsAndAnswers'], function(result) {
+    questionsAndAnswers = result.questionsAndAnswers;
+    console.log('Value currently is ' + questionsAndAnswers);
+    if(!questionsAndAnswers){
+        questionsAndAnswers = [];
+    }
+});
+
 document.getElementById("size").onkeyup = function(e){
     console.log(e.target.value);
     chrome.storage.local.set({sizeHist: e.target.value}, function() {
