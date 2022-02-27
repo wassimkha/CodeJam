@@ -5,8 +5,8 @@
     "activeTab",
     "storage"
   ],
-  "name": "Answer Qs",
-  "description": "This extension will answer any question you highlight",
+  "name": "Q&AI",
+  "description": "This extension will answer any question you highlight, and will also define any word you select",
   "version": "1.0",
   "content_scripts": [
     {
@@ -19,6 +19,7 @@
 
   "browser_action": {
     "default_icon": "/Assets/communication.png",
+    "default_title": "Q&AI",
     "default_popup": "popup.html"
   }
 }
