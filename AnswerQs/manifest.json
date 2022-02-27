@@ -7,6 +7,7 @@
   ],
   "name": "Q&AI",
   "description": "This extension will answer any question you highlight, and will also define any word you select",
+  "icons": {"48": "/Assets/communication48.png"},
   "version": "1.0",
   "content_scripts": [
     {
