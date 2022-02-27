@@ -12,7 +12,6 @@ var modalSettings = document.getElementById("settingsModal");
 var questionsAndAnswers = [];
 var sizeHist;
 
-
 function giveAnswer(question) {
     document.getElementById("output").innerHTML = "Finding answers for question: " + question;
     console.log("Finding answers for question: ", question)
@@ -77,7 +76,22 @@ xhr2.addEventListener("readystatechange", function()
       var htmlResult = String(xhr2.responseText)
       var parsedText = new DOMParser().parseFromString(htmlResult, "text/html").getElementsByTagName("DIV")[0].innerHTML;
       document.getElementById("output").innerHTML = parsedText;
-       questionsAndAnswers.push([question, parsedText]);
+
+       chrome.storage.local.get(['questionsAndAnswers'], function(result) {
+           questionsAndAnswers = result.questionsAndAnswers;
+           console.log('Value currently is ' + questionsAndAnswers);
+
+           if(!questionsAndAnswers){
+               questionsAndAnswers = [];
+           }
+
+           questionsAndAnswers.push([question, parsedText]);
+
+           chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
+               console.log('Value is set to ' + questionsAndAnswers);
+           });
+       });
+
 
    }
 });
@@ -110,7 +124,6 @@ chrome.storage.local.get(['sizeHist'], function(result) {
     console.log('Value currently is ' + sizeHist);
 });
 
-
 document.getElementById('searchBox').onkeyup = function()
 {
   clearTimeout(timer);
@@ -130,12 +143,12 @@ chrome.tabs.executeScript( {
 });
 
 function setHistory(index){
-    var history = "last questions asked:";
-    var len = questionsAndAnswers.length;
+    let history = "last questions asked:";
+    let len = questionsAndAnswers.length;
     if(len > index){
         len = index;
     }
-    for(i = 0; i < len; i++){
+    for(let i = len - 1; i >= 0; i--){
         console.log(questionsAndAnswers[len - i]);
         history += "<br/>";
         history += "<br/>" + questionsAndAnswers[i][0];
