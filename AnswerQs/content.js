@@ -83,6 +83,34 @@ function giveAnswer(question, pTag) {
     return "hello there";
 }
 
+function getDefinition2(word, pTag) {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            var res = this.responseText;
+            var obj = JSON.parse(res);
+            if (obj && obj.length > 0) {
+                var html = "";
+                for (var i = 0; i < obj.length; i++) {
+                    html += obj[i].fl + "<br> <ul>";
+                    html += "<li>" + obj[i].shortdef[0] + "</li>";
+                    html += "</ul>";
+                }
+                pTag.innerHTML = html;
+            } else {
+                pTag.innerHTML = "No definition found";
+            }
+
+        }
+    });
+
+    xhr.open("GET", "https://www.dictionaryapi.com/api/v3/references/collegiate/json/"+word+"?key=");
+
+    xhr.send();
+}
+
 function getDefinition(word, pTag) {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = false;
@@ -176,7 +204,7 @@ function fireContentLoadedEvent (items) {
             div.style.display = 'block';
             //#82b5bd
             p.innerHTML = "loading...";
-            getDefinition(selectedTextWithoutSpaces, p);
+            getDefinition2(selectedTextWithoutSpaces, p);
 
         } else {
             console.log("not a question")
