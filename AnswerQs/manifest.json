@@ -1,7 +1,9 @@
 {
   "manifest_version": 2,
   "permissions": [
-    "https://api.openai.com/*"
+    "https://api.openai.com/*",
+    "activeTab",
+    "storage"
   ],
   "name": "Answer Qs",
   "description": "This extension will answer any question you highlight",
@@ -18,8 +20,5 @@
   "browser_action": {
     "default_icon": "/Assets/communication.png",
     "default_popup": "popup.html"
-  },
-  "permissions": [
-    "activeTab"
-  ]
+  }
 }

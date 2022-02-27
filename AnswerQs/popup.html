@@ -3,12 +3,122 @@
 <head>
     <title>Questions</title>
     <script src="popup.js" defer></script>
+    <style>
+        body{
+            background-color: white;
+            width: 360px;
+            min-height: 300px;
+            overflow: auto;
+            text-align: left;
+        }
+        .header {
+            display: inline-block;
+            display: flex;
+        }
+        h3{
+            color: #203239;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: large;
+            flex-grow: 1;
+        }
+        img{
+            max-width: 30px;
+            max-height: 30px;
+        }
+        .button {
+            color: black;
+            text-align: center;
+            cursor: pointer;
+            margin-left: 20px;
+        }
+        hr{
+            border-top: 1px solid black;
+        }
+        #searchBox{
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            background-color: #E8E8E8;
+            color: black;
+        }
+        input::placeholder{
+            font-style: italic;
+            text-align: center;
+            color: black;
+        }
+        #output{
+            font-size: large;
+            text-align: justify;
+
+        }
+        .modalCommande {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modalCommande-content {
+            background-color: #fefefe;
+            border: 1px solid #888;
+            position: absolute;
+            float: left;
+            margin: auto;
+            padding: 20px;
+            width: 50%;
+            top: 30%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .row{
+            display: inline-flex;
+        }
+        .form-control{
+            width: 100%;
+            margin: 8px 0;
+            box-sizing: border-box;
+            background-color: #E8E8E8;
+            color: black;
+        }
+    </style>
 </head>
 <body>
-<h2>Search:</h2>
-<input type="text" id="searchBox" name="searchBox">
+<div class="header">
+    <img src="/Assets/communication.png" alt="logo" />
+    <h3></h3>
+    <button class="button historty" id ="showHistory">View History</button>
+    <div id="historyModal" class="modalCommande">
+        <div class="modalCommande-content">
+            <h3>History</h3>
+            <div id="target-id"></div>
+        </div>
+    </div>
+    <button class="button settings" id ="showSettings">Settings</button>
+    <div id="settingsModal" class="modalCommande">
+        <div class="modalCommande-content">
+            <h3>Settings</h3>
+            <div class="row" id="apiKey">
+                <label for="key">Your Key : </label>
+                <input type="text" class="form-control input" id="key" placeholder="Enter Your API Key">
+            </div>
+            <div class="row" id="histortySize">
+                <label for="size">History Size : </label>
+                <input type="text" class="form-control input" id="size">
+            </div>
+        </div>
+    </div>
+</div>
+<hr></hr>
+<input type="text" id="searchBox" name="searchBox" placeholder="Search Question">
 <br>
-<h1>Your response</h1>
+<h3>Your response</h3>
 <div id="output"></div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 console.log("from the extension");
-
+var apiKey;
 function getSelectionText() {
     var text = "";
     var activeEl = document.activeElement;
@@ -64,7 +64,7 @@ function giveAnswer(question, pTag) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer ");
+    xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
 
     xhr.send(data);
     return "hello there";
@@ -101,6 +101,11 @@ function getDefinition(word, pTag) {
 
     xhr.send();
 }
+
+chrome.storage.local.get(['apiKey'], function(result) {
+    apiKey = result.apiKey;
+    console.log('Value currently is ' + apiKey);
+});
 
 function fireContentLoadedEvent (items) {
     var div = document.createElement('div');
