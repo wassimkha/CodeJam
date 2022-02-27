@@ -48,6 +48,16 @@ function giveAnswer(question) {
                     //if there is a quotation mark at the end, remove it
                     completion = completion.replace(/\"/g, "");
                     addAnnotations(completion, question);
+                    document.getElementById("seeMore").innerHTML = "";
+                    var searchMore = document.getElementById("seeMore");
+                    var aElement = document.createElement("a");
+                    var path = "https://www.google.com/search?q="
+                    var queryParams = encodeURI(question);
+                    var urlMore = path + queryParams
+                    aElement.setAttribute("href", urlMore);
+                    aElement.setAttribute("target", "_blank");
+                    aElement.innerHTML = "See More";
+                    searchMore.appendChild(aElement)
                 } else {
                     document.getElementById("output").innerHTML = "No answer found";
                 }
