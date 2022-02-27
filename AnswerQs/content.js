@@ -106,7 +106,7 @@ function getDefinition2(word, pTag) {
         }
     });
 
-    xhr.open("GET", "https://www.dictionaryapi.com/api/v3/references/collegiate/json/"+word+"?key=");
+    xhr.open("GET", "https://www.dictionaryapi.com/api/v3/references/collegiate/json/"+word+"?key=f4d3b31d-cf5a-4ef6-aa61-fc06a514bcdb");
 
     xhr.send();
 }
@@ -204,7 +204,7 @@ function fireContentLoadedEvent (items) {
             div.style.display = 'block';
             //#82b5bd
             p.innerHTML = "loading...";
-            getDefinition2(selectedTextWithoutSpaces, p);
+            getDefinition(selectedTextWithoutSpaces, p);
 
         } else {
             console.log("not a question")
