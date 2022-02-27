@@ -8,11 +8,18 @@ var btnHistory = document.getElementById("showHistory");
 var modalHistory = document.getElementById("historyModal");
 var btnSettings = document.getElementById("showSettings");
 var modalSettings = document.getElementById("settingsModal");
+var btnHelp = document.getElementById("showHelp");
+var modalHelp = document.getElementById("helpModal");
 //Stores history
 var questionsAndAnswers = [];
-var sizeHist;
+var sizeHist = 3;
 
 function giveAnswer(question) {
+    question = question.trim();
+    if(question.length == 0){
+        return;
+    }
+    document.getElementById("response").innerHTML = "<h3>Your response</h3>";
     document.getElementById("output").innerHTML = "Finding answers for question: " + question;
     console.log("Finding answers for question: ", question)
     //if the question does not end with \n, add it
@@ -131,19 +138,6 @@ chrome.storage.local.get(['questionsAndAnswers'], function(result) {
     }
 });
 
-document.getElementById("size").onkeyup = function(e){
-    console.log(e.target.value);
-    chrome.storage.local.set({sizeHist: e.target.value}, function() {
-        console.log('Value is set to ' + e.target.value);
-        sizeHist = e.target.value;
-    });
-}
-
-chrome.storage.local.get(['sizeHist'], function(result) {
-    sizeHist = result.sizeHist;
-    console.log('Value currently is ' + sizeHist);
-});
-
 document.getElementById('searchBox').onkeyup = function()
 {
   clearTimeout(timer);
@@ -172,10 +166,7 @@ chrome.tabs.executeScript( {
 function setHistory(index){
     let history = "last questions asked:";
     let len = questionsAndAnswers.length;
-    if(len > index){
-        len = index;
-    }
-    for(let i = len - 1; i >= 0; i--){
+    for(let i = len - 1; i >= len - sizeHist; i--){
         console.log(questionsAndAnswers[len - i]);
         history += "<br/>";
         history += "<br/>Q: " + questionsAndAnswers[i][0];
@@ -193,11 +184,18 @@ btnSettings.onclick = function() {
     modalSettings.style.display = "block";
 }
 
+btnHelp.onclick = function() {
+    modalHelp.style.display = "block";
+}
+
 window.onclick = function(event) {
     if (event.target == modalHistory) {
         modalHistory.style.display = "none";
     }
     if (event.target == modalSettings) {
         modalSettings.style.display = "none";
+    }
+    if (event.target == modalHelp) {
+        modalHelp.style.display = "none";
     }
 }

@@ -4,13 +4,19 @@
     <title>Questions</title>
     <script src="popup.js" defer></script>
     <style>
+
+        @font-face {
+        font-family: 'Inter';
+        src: url('Assets/Inter-SemiBold.ttf');
+        }
         body{
             background-color: white;
             width: 360px;
-            min-height: 300px;
-            max-height: 1000px;
+            min-height: 350px;
+            max-height: 800px;
             overflow: auto;
             text-align: left;
+            margin: 0px;
         }
 
         #seeMore
@@ -20,24 +26,33 @@
         }
 
         .header {
+            background-color: #508edf;
             display: inline-block;
             display: flex;
+            padding-left: 8px;
+            padding-right: 8px;
+            box-shadow: 0px 5px 25px rgb(80 142 223/0.8);
         }
         h3{
             color: #203239;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: Inter;
             font-size: large;
             flex-grow: 1;
         }
         img{
-            max-width: 30px;
-            max-height: 30px;
+            max-width: 100px;
+            max-height: 50px;
         }
         .button {
             color: black;
+            font-family: Inter;
             text-align: center;
             cursor: pointer;
-            margin-left: 20px;
+            padding: 0px 10px 0px 10px;
+            height: 30px;
+            margin-left: 5px;
+            margin-top: 10px;
+            border-radius: 12px;
         }
         hr{
             border-top: 1px solid black;
@@ -46,19 +61,20 @@
             width: 100%;
             padding: 12px 20px;
             margin: 8px 0;
+            border-radius: 12px;
             box-sizing: border-box;
             background-color: #E8E8E8;
             color: black;
         }
         input::placeholder{
-            font-style: italic;
+            font-family: Inter;
             text-align: center;
             color: black;
         }
         #output{
+            font-family: Inter;
             font-size: large;
             text-align: justify;
-
         }
         .modalCommande {
             display: none;
@@ -95,13 +111,19 @@
             background-color: #E8E8E8;
             color: black;
         }
+        #content{
+            margin: 8px;
+        }
+        #apiKey.label{
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 <div class="header">
-    <img src="/Assets/communication.png" alt="logo" />
+    <img src="/Assets/logo2.png"  width="3000" height="800" alt="logo" />
     <h3></h3>
-    <button class="button historty" id ="showHistory">View History</button>
+    <button class="button historty" id ="showHistory">History</button>
     <div id="historyModal" class="modalCommande">
         <div class="modalCommande-content">
             <h3>History</h3>
@@ -116,12 +138,22 @@
                 <label for="key">Your Key : </label>
                 <input type="text" class="form-control input" id="key" placeholder="Enter Your API Key">
             </div>
-            <div class="row" id="histortySize">
-                <label for="size">History Size : </label>
-                <input type="text" class="form-control input" id="size">
-            </div>
         </div>
     </div>
+
+    <button class="button help" id ="showHelp">?</button>
+    <div id="helpModal" class="modalCommande">
+        <div class="modalCommande-content">
+            <h3>Help</h3>
+            
+        </div>
+    </div>
+</div>
+<div id ="content">
+    <input type="text" id="searchBox" name="searchBox" placeholder="Search Question">
+    <br>
+    <h3 id="response"></h3>
+    <div id="output"></div>
 </div>
 <hr></hr>
 <input type="text" id="searchBox" name="searchBox" placeholder="Search Question">
