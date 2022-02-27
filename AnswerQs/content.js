@@ -9,12 +9,12 @@ function getSelectionText() {
         (activeElTagName == "textarea") || (activeElTagName == "input" &&
             /^(?:text|search|password|tel|url)$/i.test(activeEl.type)) &&
         (typeof activeEl.selectionStart == "number")
-    ) {
+        ) {
         text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
-    } else if (window.getSelection) {
-        text = window.getSelection().toString();
-    }
-    return text;
+} else if (window.getSelection) {
+    text = window.getSelection().toString();
+}
+return text;
 }
 var selectedText = "";
 var loading = false
@@ -39,7 +39,7 @@ function giveAnswer(question, pTag) {
         "frequency_penalty": 0,
         "presence_penalty": 0,
         "stop": [
-            "\n"
+        "\n"
         ]
     });
 

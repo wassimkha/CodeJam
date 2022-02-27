@@ -1,13 +1,13 @@
 <!doctype html>
-<html>
-<head>
-    <title>Questions</title>
-    <script src="popup.js" defer></script>
-    <style>
+    <html>
+    <head>
+        <title>Questions</title>
+        <script src="popup.js" defer></script>
+        <style>
 
         @font-face {
-        font-family: 'Inter';
-        src: url('Assets/Inter-SemiBold.ttf');
+            font-family: 'Inter';
+            src: url('Assets/Inter-SemiBold.ttf');
         }
         body{
             background-color: white;
@@ -131,66 +131,66 @@
     </style>
 </head>
 <body>
-<div class="header">
-    <img src="/Assets/logo2.png"  width="3000" height="800" alt="logo" />
-    <h3></h3>
-    <button class="button historty" id ="showHistory">History</button>
-    <div id="historyModal" class="modalCommande">
-        <div class="modalCommande-content">
-            <h3>History</h3>
-            <div id="target-id"></div>
+    <div class="header">
+        <img src="/Assets/logo2.png"  width="3000" height="800" alt="logo" />
+        <h3></h3>
+        <button class="button historty" id ="showHistory">History</button>
+        <div id="historyModal" class="modalCommande">
+            <div class="modalCommande-content">
+                <h3>History</h3>
+                <div id="target-id"></div>
+            </div>
         </div>
-    </div>
-    <button class="button settings" id ="showSettings">Settings</button>
-    <div id="settingsModal" class="modalCommande">
-        <div class="modalCommande-content">
-            <h3>Settings</h3>
-            <div class="row" id="apiKey">
-                <label for="key">Your Key : </label>
-                <input type="text" class="form-control input" id="key" placeholder="Enter Your API Key">
+        <button class="button settings" id ="showSettings">Settings</button>
+        <div id="settingsModal" class="modalCommande">
+            <div class="modalCommande-content">
+                <h3>Settings</h3>
+                <div class="row" id="apiKey">
+                    <label for="key">Your Key : </label>
+                    <input type="text" class="form-control input" id="key" placeholder="Enter Your API Key">
+                </div>
+            </div>
+        </div>
+
+        <button class="button help" id ="showHelp">?</button>
+        <div id="helpModal" class="modalCommande">
+            <div class="modalCommande-content modalCommande-help">
+                <h2 class="help-text">Setup:</h2>
+                <p class="help-text">
+                    1) Create a free account on Open AI
+                    <br>
+                    2) Copy your API key from Open AI's dashboard
+                    <br>
+                    3) Paste your key in the extension's settings
+                    <br>
+                    4) Enjoy!
+                </p>
+
+                <h2 class="help-text">How to Use:</h2>
+                <p class="help-text">
+                    -Select a word from any page to get its definition
+                    <br>
+                    -Select a question from any page to get its answer (question must end with "?")
+                    <br>
+                    -Click directly on the extension icon for a more detailed response.
+                </p>
+                <h2 class="help-text">About:</h2>
+                <p class="help-text">
+                    This extension was created for the McGill 2022 CodeJam.
+                    Powered by Open AI API, DBPedia, DictionaryAPI.dev
+                    <br>
+                    Created By:
+                    Louis Madre, Wassim Khadim, Sara Beddouch, Jack Denton
+                </p>
             </div>
         </div>
     </div>
-
-    <button class="button help" id ="showHelp">?</button>
-    <div id="helpModal" class="modalCommande">
-        <div class="modalCommande-content modalCommande-help">
-            <h2 class="help-text">Setup:</h2>
-            <p class="help-text">
-            1) Create a free account on Open AI
-            <br>
-            2) Copy your API key from Open AI's dashboard
-            <br>
-            3) Paste your key in the extension's settings
-            <br>
-            4) Enjoy!
-            </p>
-
-            <h2 class="help-text">How to Use:</h2>
-            <p class="help-text">
-            -Select a word from any page to get its definition
-            <br>
-            -Select a question from any page to get its answer (question must end with "?")
-            <br>
-            -Click directly on the extension icon for a more detailed response.
-            </p>
-            <h2 class="help-text">About:</h2>
-            <p class="help-text">
-            This extension was created for the McGill 2022 CodeJam.
-            Powered by Open AI API, DBPedia, DictionaryAPI.dev
-            <br>
-            Created By:
-            Louis Madre, Wassim Khadim, Sara Beddouch, Jack Denton
-            </p>
-        </div>
+    <div id ="content">
+        <input type="text" id="searchBox" name="searchBox" placeholder="Search Question">
+        <br>
+        <h3 id="response"></h3>
+        <div id="output"></div>
+        <div id="seeMore"></div>
     </div>
-</div>
-<div id ="content">
-    <input type="text" id="searchBox" name="searchBox" placeholder="Search Question">
-    <br>
-    <h3 id="response"></h3>
-    <div id="output"></div>
-    <div id="seeMore"></div>
-</div>
 </body>
 </html>

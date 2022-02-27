@@ -36,7 +36,7 @@ function giveAnswer(question) {
         "frequency_penalty": 0,
         "presence_penalty": 0,
         "stop": [
-            "\n"
+        "\n"
         ]
     });
 
@@ -81,39 +81,39 @@ function giveAnswer(question) {
 
 function addAnnotations(answerText, question)
 {
-var urlpath = "https://api.dbpedia-spotlight.org/en/annotate?text=";
-var queryParams = encodeURI(answerText);
-var url = urlpath + queryParams
+    var urlpath = "https://api.dbpedia-spotlight.org/en/annotate?text=";
+    var queryParams = encodeURI(answerText);
+    var url = urlpath + queryParams
 
-var xhr2 = new XMLHttpRequest();
-xhr2.open("GET", url);
-xhr2.addEventListener("readystatechange", function() 
-{
-   if (xhr2.readyState === 4)
-   {
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", url);
+    xhr2.addEventListener("readystatechange", function() 
+    {
+     if (xhr2.readyState === 4)
+     {
       var htmlResult = String(xhr2.responseText)
       var parsedText = new DOMParser().parseFromString(htmlResult, "text/html").getElementsByTagName("DIV")[0].innerHTML;
       document.getElementById("output").innerHTML = parsedText;
 
-       chrome.storage.local.get(['questionsAndAnswers'], function(result) {
-           questionsAndAnswers = result.questionsAndAnswers;
-           console.log('Value currently is ' + questionsAndAnswers);
+      chrome.storage.local.get(['questionsAndAnswers'], function(result) {
+         questionsAndAnswers = result.questionsAndAnswers;
+         console.log('Value currently is ' + questionsAndAnswers);
 
-           if(!questionsAndAnswers){
-               questionsAndAnswers = [];
-           }
+         if(!questionsAndAnswers){
+             questionsAndAnswers = [];
+         }
 
-           questionsAndAnswers.push([question, parsedText]);
+         questionsAndAnswers.push([question, parsedText]);
 
-           chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
-               console.log('Value is set to ' + questionsAndAnswers);
-           });
-       });
+         chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
+             console.log('Value is set to ' + questionsAndAnswers);
+         });
+     });
 
 
-   }
+  }
 });
-xhr2.send();
+    xhr2.send();
 }
 
 document.getElementById("key").onkeyup = function(e){
