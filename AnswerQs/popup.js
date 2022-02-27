@@ -1,7 +1,17 @@
 // timer variables
+// timer variables
+const time = 1700;
 var timer;
 var typetimer;
-const time = 1700;
+var apiKey;
+var btnHistory = document.getElementById("showHistory");
+var modalHistory = document.getElementById("historyModal");
+var btnSettings = document.getElementById("showSettings");
+var modalSettings = document.getElementById("settingsModal");
+//Stores history
+var questionsAndAnswers = [];
+var sizeHist;
+
 
 function giveAnswer(question) {
     document.getElementById("output").innerHTML = "Finding answers for question: " + question;
@@ -36,7 +46,7 @@ function giveAnswer(question) {
             if (obj && obj.choices && obj.choices.length > 0) {
                 var completion = obj.choices[0].text;
                 if (completion.length > 0) {
-                    addAnnotations(completion);
+                    addAnnotations(completion, question);
                 } else {
                     document.getElementById("output").innerHTML = "No answer found";
                 }
@@ -46,13 +56,13 @@ function giveAnswer(question) {
 
     xhr.open("POST", "https://api.openai.com/v1/engines/text-davinci-001/completions");
     xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer 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");
+    xhr.setRequestHeader("Authorization", "Bearer " + apiKey);
 
     xhr.send(data);
     return "hello there";
 }
 
-function addAnnotations(answerText)
+function addAnnotations(answerText, question)
 {
 var urlpath = "https://api.dbpedia-spotlight.org/en/annotate?text=";
 var queryParams = encodeURI(answerText);
@@ -67,10 +77,39 @@ xhr2.addEventListener("readystatechange", function()
       var htmlResult = String(xhr2.responseText)
       var parsedText = new DOMParser().parseFromString(htmlResult, "text/html").getElementsByTagName("DIV")[0].innerHTML;
       document.getElementById("output").innerHTML = parsedText;
+       questionsAndAnswers.push([question, parsedText]);
+
    }
 });
 xhr2.send();
 }
+
+document.getElementById("key").onkeyup = function(e){
+    console.log(e.target.value);
+    chrome.storage.local.set({apiKey: e.target.value}, function() {
+        console.log('Value is set to ' + e.target.value);
+        apiKey = e.target.value;
+    });
+}
+
+chrome.storage.local.get(['apiKey'], function(result) {
+    apiKey = result.apiKey;
+    console.log('Value currently is ' + apiKey);
+});
+
+document.getElementById("size").onkeyup = function(e){
+    console.log(e.target.value);
+    chrome.storage.local.set({sizeHist: e.target.value}, function() {
+        console.log('Value is set to ' + e.target.value);
+        sizeHist = e.target.value;
+    });
+}
+
+chrome.storage.local.get(['sizeHist'], function(result) {
+    sizeHist = result.sizeHist;
+    console.log('Value currently is ' + sizeHist);
+});
+
 
 document.getElementById('searchBox').onkeyup = function()
 {
@@ -89,3 +128,36 @@ chrome.tabs.executeScript( {
 }, function(selection) {
     giveAnswer(selection);
 });
+
+function setHistory(index){
+    var history = "last questions asked:";
+    var len = questionsAndAnswers.length;
+    if(len > index){
+        len = index;
+    }
+    for(i = 0; i < len; i++){
+        console.log(questionsAndAnswers[len - i]);
+        history += "<br/>";
+        history += "<br/>" + questionsAndAnswers[i][0];
+        history += "<br/>" + questionsAndAnswers[i][1];
+    }
+    return history;
+}
+
+btnHistory.onclick = function() {
+    document.getElementById('target-id').innerHTML = setHistory(sizeHist);
+    modalHistory.style.display = "block";
+}
+
+btnSettings.onclick = function() {
+    modalSettings.style.display = "block";
+}
+
+window.onclick = function(event) {
+    if (event.target == modalHistory) {
+        modalHistory.style.display = "none";
+    }
+    if (event.target == modalSettings) {
+        modalSettings.style.display = "none";
+    }
+}
