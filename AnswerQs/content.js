@@ -1,4 +1,3 @@
-console.log("from the extension");
 var apiKey;
 
 function getSelectionText() {
@@ -23,13 +22,11 @@ var loading = false
 document.addEventListener('DOMContentLoaded', fireContentLoadedEvent(), false);
 
 function giveAnswer(question, pTag) {
-    console.log("Finding answers for question 2: ", question)
     //if the question does not end with \n, add it
     var match = /\r|\n/.exec(question);
     if (!match) {
         question += "\n";
         question += "\n";
-        console.log("adding space breaks");
     }
     var data = JSON.stringify({
         "prompt": "Q: " + question + "\nA:",
@@ -50,8 +47,9 @@ function giveAnswer(question, pTag) {
         if(this.readyState === 4) {
             var res = this.responseText;
             var obj = JSON.parse(res);
-            console.log(obj, obj.choices)
-            if (obj && obj.choices && obj.choices.length > 0) {
+            if (obj && obj.error) {
+                pTag.innerHTML = "error from OpenAI: " + obj.error.message
+            } else if (obj && obj.choices && obj.choices.length > 0) {
                 var completion = obj.choices[0].text;
                 loading = false;
                 if (completion.length > 0) {
@@ -64,7 +62,6 @@ function giveAnswer(question, pTag) {
                             questionsAndAnswers.push([question, completion]);
 
                             chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
-                                console.log('Value is set to ' + questionsAndAnswers);
                             });
                         }
                     });
@@ -119,7 +116,6 @@ function getDefinition(word, pTag) {
         if(this.readyState === 4) {
             var res = this.responseText;
             var obj = JSON.parse(res);
-            console.log(obj, obj.length)
             if (obj && obj.length > 0) {
                 obj = obj[0];
                 var html = "";
@@ -145,7 +141,6 @@ function getDefinition(word, pTag) {
 
 chrome.storage.local.get(['apiKey'], function(result) {
     apiKey = result.apiKey;
-    console.log('Value currently is ' + apiKey);
 });
 
 function fireContentLoadedEvent (items) {
@@ -185,7 +180,6 @@ function fireContentLoadedEvent (items) {
         var spaceCount = (selectedTextWithoutSpaces.split(" ").length - 1);
         //show if selected text is longer than 3 charaters
         if (selectedText.length > 3 && selectedTextWithoutSpaces.endsWith("?")) {
-            console.log("we got a question");
             h1.innerHTML = "Your Answer";
             div.style.top = e.pageY + 'px';
             div.style.left = e.pageX + 'px';
@@ -195,7 +189,6 @@ function fireContentLoadedEvent (items) {
             p.innerHTML = "loading...";
             giveAnswer(selectedText, p);
         } else if (selectedTextWithoutSpaces.length >= 1 && spaceCount == 0) {
-            console.log("got a single word");
             h1.innerHTML = "Your definition";
             div.style.top = e.pageY + 'px';
             div.style.left = e.pageX + 'px';
@@ -207,7 +200,6 @@ function fireContentLoadedEvent (items) {
             getDefinition(selectedTextWithoutSpaces, p);
 
         } else {
-            console.log("not a question")
             loading = false;
             div.style.display = 'none';
             p.innerHTML = "";

@@ -20,13 +20,11 @@ function giveAnswer(question) {
     }
     document.getElementById("response").innerHTML = "<h3>Your response</h3>";
     document.getElementById("output").innerHTML = "Finding answers for question: " + question;
-    console.log("Finding answers for question: ", question)
     //if the question does not end with \n, add it
     var match = /\r|\n/.exec(question);
     if (!match) {
         question += "\n";
         question += "\n";
-        console.log("adding space breaks");
     }
     var data = JSON.stringify({
         "prompt": "Q: " + question + '\\nA:"',
@@ -47,8 +45,9 @@ function giveAnswer(question) {
         if(this.readyState === 4) {
             var res = this.responseText;
             var obj = JSON.parse(res);
-            console.log(obj, obj.choices)
-            if (obj && obj.choices && obj.choices.length > 0) {
+            if (obj && obj.error) {
+                pTag.innerHTML = "error from OpenAI: " + obj.error.message
+            } else if (obj && obj.choices && obj.choices.length > 0) {
                 var completion = obj.choices[0].text;
                 if (completion.length > 0) {
                     //if there is a quotation mark at the end, remove it
@@ -97,7 +96,6 @@ function addAnnotations(answerText, question)
 
       chrome.storage.local.get(['questionsAndAnswers'], function(result) {
          questionsAndAnswers = result.questionsAndAnswers;
-         console.log('Value currently is ' + questionsAndAnswers);
 
          if(!questionsAndAnswers){
              questionsAndAnswers = [];
@@ -106,7 +104,6 @@ function addAnnotations(answerText, question)
          questionsAndAnswers.push([question, parsedText]);
 
          chrome.storage.local.set({questionsAndAnswers: questionsAndAnswers}, function() {
-             console.log('Value is set to ' + questionsAndAnswers);
          });
      });
 
@@ -117,21 +114,17 @@ function addAnnotations(answerText, question)
 }
 
 document.getElementById("key").onkeyup = function(e){
-    console.log(e.target.value);
     chrome.storage.local.set({apiKey: e.target.value}, function() {
-        console.log('Value is set to ' + e.target.value);
         apiKey = e.target.value;
     });
 }
 
 chrome.storage.local.get(['apiKey'], function(result) {
     apiKey = result.apiKey;
-    console.log('Value currently is ' + apiKey);
 });
 
 chrome.storage.local.get(['questionsAndAnswers'], function(result) {
     questionsAndAnswers = result.questionsAndAnswers;
-    console.log('Value currently is ' + questionsAndAnswers);
     if(!questionsAndAnswers){
         questionsAndAnswers = [];
     }
@@ -166,7 +159,6 @@ function setHistory(index){
     let history = "last questions asked:";
     let len = questionsAndAnswers.length;
     for(let i = len - 1; i >= len - sizeHist; i--){
-        console.log(questionsAndAnswers[len - i]);
         history += "<br/>";
         history += "<br/>Q: " + questionsAndAnswers[i][0];
         history += "<br/>A: " + questionsAndAnswers[i][1];
